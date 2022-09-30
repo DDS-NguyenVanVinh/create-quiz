@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "../src/";
+import FormEmployee from "./component/FormEmployee";
+import Control from "./component/main-list-employee/Control";
+import EmployeeList from "./component/main-list-employee/EmployeeList";
+import Employee from "./interface/type";
+import { setEmployee } from "./redux/action";
+import { getDataSourceEmployee } from "./redux/selection";
 
 function App() {
+  const dispatch = useDispatch();
+
+  const dataSourceEmployee = useSelector(getDataSourceEmployee);
+
+  const [isOpenFormEmployee, setIsOpenFormEmployee] = useState(false);
+
+  const handleSubmitForm = (data: Employee) => {
+    const newDataSourceEmployee = [...dataSourceEmployee, data];
+    dispatch(setEmployee(newDataSourceEmployee));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <EmployeeList />
+      {isOpenFormEmployee && <FormEmployee onSubmitForm={handleSubmitForm} />}
+      <Control />
+    </>
   );
 }
 
 export default App;
+
+const MOCK_DATA = [
+  {
+    name: "Nguyễn Văn Nam",
+    position: "Tổng giám dốc",
+    department: "IT",
+    phoneNumber: "0965236987",
+  },
+  {
+    name: "Nguyễn Văn Minh",
+    position: "giám dốc",
+    department: "IT",
+    phoneNumber: "0965236987",
+  },
+  {
+    name: "Quế Ngọc Hải",
+    position: "Leader",
+    department: "Marketing",
+    phoneNumber: "0965236987",
+  },
+  {
+    name: "Bùi Tiến Dũng",
+    position: "Nhân viên",
+    department: "Hành chính",
+    phoneNumber: "0965236987",
+  },
+];
